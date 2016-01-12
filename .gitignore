@@ -6,3 +6,6 @@ expect_config
 C488
 
 
+## RubyMine stuff
+.idea
+
