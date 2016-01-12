@@ -12,7 +12,7 @@ bundle install
 
 
 # start Sinatra webserver:
-ruby app.rb
+ruby app.rb -o 0.0.0.0
 
 # test locally in terminal:
 ruby solve_situation.rb [GAME-NUMBER] (dutch|german|english)
