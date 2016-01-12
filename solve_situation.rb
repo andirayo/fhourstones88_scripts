@@ -1,15 +1,7 @@
 # encoding: utf-8
 # coding: utf-8
-require 'nokogiri'
 require 'faraday'
-require 'open-uri'
-require 'cgi'
 require 'open3'
-require "timeout"
-
-require 'date'
-require 'set'
-
 
 
 game_number           = ARGV[0]   #|| '1118146'
@@ -277,6 +269,8 @@ printf( <<-Rayo,
   Best Result    :  %s
   Possibilities
 %s%s%s
+
+<>
 
         Rayo
         result_to_string(best_result),
