@@ -7,6 +7,7 @@ cd fhourstones88_scripts/fhourstones88/
 # potentially fix problem for Ubunut in line 139 of Search.cpp by adding as 3rd parameter:  ", S_IRUSR|S_IWUSR"
 make
 cd ../
+apt-get install expect
 bundle install
 
 ruby solve_situation.rb [GAME-NUMBER] (dutch|german|english)
