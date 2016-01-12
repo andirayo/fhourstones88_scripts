@@ -34,12 +34,13 @@ check_game  = lambda do
       post_params = request.body.read.split('&').map {|e| e.split('=',2)}.to_h
 
       out << '<h1>Starting Evaluation!</h1><code style="color:#FFFFFF;background-color:#000000;white-space: pre-wrap;">' + "\n"
-      sleep 1
 
       #game_number           = ARGV[0]   #|| '1118146'
       #website_type          = (ARGV[1]  ||  :german).to_sym
       game_number           = post_params['game_number']
       website_type          = post_params['website'].to_sym
+
+      File.open( 'usage_logs.txt', 'a' ) {|f| f.write( sprintf("%15s: %7s, %s\n", ['HTTP_X_FORWARDED_FOR']  ||  env['REMOTE_ADDR']  ||  "-") )}
 
       unless game_number  &&  ! game_number.to_s.empty?
         raise 'Please enter a game number (%s)!' % game_number
