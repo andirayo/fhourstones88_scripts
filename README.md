@@ -10,6 +10,11 @@ cd ../
 apt-get install expect
 bundle install
 
+
+# start Sinatra webserver:
+ruby app.rb
+
+# test locally in terminal:
 ruby solve_situation.rb [GAME-NUMBER] (dutch|german|english)
 ruby solve_situation.rb 'e1, e2, e3, e4, e5, e6, e7'
 ```
