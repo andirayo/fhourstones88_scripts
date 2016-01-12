@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'open3'
 require 'faraday'
+require 'cgi'
 
 
 SOLVER_FILE           = './C488'
@@ -37,10 +38,11 @@ check_game  = lambda do
 
       #game_number           = ARGV[0]   #|| '1118146'
       #website_type          = (ARGV[1]  ||  :german).to_sym
-      game_number           = post_params['game_number']
+      game_number           = CGI::unescape( post_params['game_number'] || '' )
       website_type          = post_params['website'].to_sym
+      phone_number          = CGI::unescape( post_params['phone_number'] || '' )
 
-      File.open( 'usage_logs.txt', 'a' ) {|f| f.write( sprintf("%15s: %7s, %s\n", ['HTTP_X_FORWARDED_FOR']  ||  env['REMOTE_ADDR']  ||  "-") )}
+      File.open( 'usage_logs.txt', 'a' ) {|f| f.write( sprintf("%15s: %7s, %s  (%s)\n", env['HTTP_X_FORWARDED_FOR']  ||  env['REMOTE_ADDR']  ||  "-", website_type, game_number, phone_number) )}
 
       unless game_number  &&  ! game_number.to_s.empty?
         raise 'Please enter a game number (%s)!' % game_number
@@ -294,6 +296,7 @@ Possibilities
     rescue => ex
       out << "\n</code>\n"
       out << '<h2>%s!<h2>' % ex.class
+      out << '<h3>%s!<h3>' % ex.message
       out << "\n<code>\n"
       out << ex.inspect
       out << ex.backtrace
