@@ -42,7 +42,7 @@ check_game  = lambda do
       website_type          = post_params['website'].to_sym
       phone_number          = CGI::unescape( post_params['phone_number'] || '' )
 
-      File.open( 'usage_logs.txt', 'a' ) {|f| f.write( sprintf("%15s: %7s, %s  (%s)\n", env['HTTP_X_FORWARDED_FOR']  ||  env['REMOTE_ADDR']  ||  "-", website_type, game_number, phone_number) )}
+      File.open( 'usage_logs.txt', 'a' ) {|f| f.write( sprintf("\n%s%15s: %7s, %s (%s) - ", Time.now.strftime("%m-%dT%T"), env['HTTP_X_FORWARDED_FOR']  ||  env['REMOTE_ADDR']  ||  "-", website_type, game_number, phone_number) )}
 
       unless game_number  &&  ! game_number.to_s.empty?
         raise 'Please enter a game number (%s)!' % game_number
@@ -293,6 +293,8 @@ Possibilities
 
       out << "\n</code>"
 
+      File.open( 'usage_logs.txt', 'a' ) {|f| f.write( result_to_string(best_result) )}
+
     rescue => ex
       out << "\n</code>\n"
       out << '<h2>%s!<h2>' % ex.class
@@ -301,6 +303,8 @@ Possibilities
       out << ex.inspect
       out << ex.backtrace
       out << "\n</code>\n"
+
+      File.open( 'usage_logs.txt', 'a' ) {|f| f.write( ex.class.name )}
     end
   end #stream
 end #check_game
