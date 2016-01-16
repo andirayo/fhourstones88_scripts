@@ -58,7 +58,7 @@ check_game  = lambda do
         move_list               = game_number
         out << sprintf( "Current situation:  %s\n", move_list )
 
-        situation_to_be_solved  = move_list.split(/,\s?/).map {|cell| cell[0].ord - 96}.join
+        situation_to_be_solved  = move_list.gsub(/['"]/, '').split(/,\s?/).map {|cell| cell[0].ord - 96}.join
         game_number = nil
       end #if-else
 
