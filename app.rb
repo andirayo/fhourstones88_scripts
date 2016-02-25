@@ -315,6 +315,10 @@ end #check_game
 
 
 
+get /\/analyzer?\/?/ do
+  content_type 'text/html'
+  File.read( 'analyze/src/index.html' )
+end
 get '/' do
   content_type 'text/html'
   File.read( 'index.html' )
