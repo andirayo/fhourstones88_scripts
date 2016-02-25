@@ -19,9 +19,10 @@ if (Float(game_number)  rescue false)
 
 else
   move_list               = game_number
-  printf( "Current situation:  %s\n", move_list )
-
   situation_to_be_solved  = move_list.split(/,\s?/).map {|cell| cell[0].ord - 96}.join
+
+  cols                    = Hash.new{|h,k|h[k]=0}
+  printf( "Current situation:  %s\n", situation_to_be_solved.chars.map {|col| c = (col.to_i + 96).chr; cols[c] += 1; c + cols[c].to_s}.join(', ') )
   game_number = nil
 end #if-else
 
@@ -32,7 +33,7 @@ EXPECT_SUBFOLDER      = 'fhourstones88/'
 CONFIG_FILE_NAME      = 'expect_config'
 EXPECT_CONFIG_FILE    = EXPECT_SUBFOLDER  +  CONFIG_FILE_NAME
 EXPECT_COMMAND        = sprintf( 'cd %s;  expect %s', EXPECT_SUBFOLDER, CONFIG_FILE_NAME )
-SOLVER_TIMEOUT        = 8  # seconds
+SOLVER_TIMEOUT        = 60  # seconds
 BUFFER_SIZE           = 1024
 
 OUTPUT_TIMEOUT        = '?'
@@ -207,7 +208,15 @@ def solve_situation( situation_to_be_solved )
   return [best_result,possibilities]  if [OUTPUT_LOSS, OUTPUT_TIMEOUT].include?( best_result )
 
 
-  (1..8).each do |try|
+  # determining the order in which to check for outcomes to special possible columns
+  # first check the last 2 columns that was played in
+  last_column   = situation_to_be_solved[-1].to_i
+  second_last   = situation_to_be_solved[-2].to_i
+  # order the remaining columns inside out
+  default_order = [4,5,3,6,2,7,1,8]
+  check_order   = ([last_column, second_last] + default_order).uniq
+
+  check_order.each do |try|
     next  if column_full?( situation_to_be_solved, try )
 
     result      = reverse_result( prepare_expect_config_and_solve( situation_to_be_solved + try.to_s ) )
