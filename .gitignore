@@ -6,6 +6,8 @@ expect_config
 C488
 ## simple access logs
 usage_logs.txt
+## unsolved situations for later evaluation
+unsolved
 
 ## RubyMine stuff
 .idea
