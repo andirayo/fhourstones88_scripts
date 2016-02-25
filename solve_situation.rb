@@ -19,10 +19,12 @@ if (Float(game_number)  rescue false)
 
 else
   move_list               = game_number
-  situation_to_be_solved  = move_list.split(/,\s?/).map {|cell| cell[0].ord - 96}.join
+  situation_to_be_solved  = move_list.split(/[,_]\s?/).map {|cell| cell[0].ord - 96}.join
 
   cols                    = Hash.new{|h,k|h[k]=0}
-  printf( "Current situation:  %s\n", situation_to_be_solved.chars.map {|col| c = (col.to_i + 96).chr; cols[c] += 1; c + cols[c].to_s}.join(', ') )
+  moves_sorted            = situation_to_be_solved.chars.map {|col| c = (col.to_i + 96).chr; cols[c] += 1; c + cols[c].to_s}
+  printf( "Current situation:  %s\n", moves_sorted.join(',') )
+  printf( "Current situation:  %s\n", moves_sorted.join('_') )
   game_number = nil
 end #if-else
 
@@ -118,8 +120,8 @@ def analyze_brettspielnetz_game( game_number, country = :german )
 
 
 
-  move_list                 = moves_sorted.join( ', ' )
-  printf( "Current situation:  %s\n", move_list )
+  printf( "Current situation:  %s\n", moves_sorted.join(',') )
+  printf( "Current situation:  %s\n", moves_sorted.join('_') )
 
   moves_sorted_columns_only = moves_sorted.map {|cell| cell[0].ord - 96}.join
 
@@ -218,9 +220,10 @@ def solve_situation( situation_to_be_solved )
 
   check_order.each do |try|
     next  if column_full?( situation_to_be_solved, try )
+    printf '%s:', (64 + try).chr
 
     result      = reverse_result( prepare_expect_config_and_solve( situation_to_be_solved + try.to_s ) )
-    print result
+    printf '%s:%s | ', (64 + try).chr, result
 
 
     possibilities[result] << try
